@@ -1,6 +1,6 @@
 import {HttpErrors} from "../models/http-errors.js";
 import {validationResult} from "express-validator";
-import {getCoords} from "../util/location.js";
+import {getCoords} from "../Util/location.js";
 import {Place} from "../models/place.js";
 import {User} from "../models/user.js";
 import mongoose from "mongoose";
