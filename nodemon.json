@@ -1,0 +1,7 @@
+{
+  "env": {
+    "DB_USER" : "krish",
+    "DB_PASSWORD" : "banana1234",
+    "DB_NAME" : "TakeATrip"
+  }
+}
