@@ -27,7 +27,6 @@ app.use((req, res, next) => {
 });
 app.use((error, req, res, next) => {
     if(req.file){
-        console.log(req.file.path)
         fs.unlink(req.file.path, err => {
             console.log(err);
         });
@@ -35,7 +34,7 @@ app.use((error, req, res, next) => {
     if (res.headerSent) {
         return next(error);
     }
-    res.status(error.code || 500).json({message: req.file.path || "An unknown error occurred!"});
+    res.status(error.code || 500).json({message: error.message || "An unknown error occurred!"});
 });
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.sirovsp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`).then(() => {
