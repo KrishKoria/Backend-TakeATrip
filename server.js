@@ -26,7 +26,7 @@ app.use((req, res, next) => {
     next(new HttpErrors('Could not find this route.', 404));
 });
 app.use((error, req, res, next) => {
-    if(req.file){
+    if(req.file && fs.existsSync(req.file.path)){
         fs.unlink(req.file.path, err => {
             console.log(err);
         });
