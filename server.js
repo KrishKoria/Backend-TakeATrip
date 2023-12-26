@@ -6,25 +6,32 @@ import mongoose from "mongoose";
 import {HttpErrors} from "./models/http-errors.js";
 import fs from 'fs';
 import * as path from "path";
-const app = express();
+import { fileURLToPath } from 'url';
 
+const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(bodyParser.json({extended: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
-    res.setHeader('Access-Control-Allow-Private-Network', true);
-    next();
-});
+app.use(express.static(path.join('public')))
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
+//     res.setHeader('Access-Control-Allow-Private-Network', true);
+//     next();
+// });
 
 app.use('/api/places', placesRoutes);
-
 app.use('/api/users', userRoutes);
+
 app.use((req, res, next) => {
-    next(new HttpErrors('Could not find this route.', 404));
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
+// app.use((req, res, next) => {
+//     next(new HttpErrors('Could not find this route.', 404));
+// });
 app.use((error, req, res, next) => {
     if(req.file && fs.existsSync(req.file.path)){
         fs.unlink(req.file.path, err => {
